@@ -43,7 +43,12 @@ def driver():
         return 'ERROR'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
-
+    client.api.account.messages.create(
+        to=phoneNumber,
+        from_= fromNumber,
+        body=outputStrs
+        )
+    return outputStrs
     #if phoneNumber == 
 
 @app.route("/_confirm", method = ['POST'])
