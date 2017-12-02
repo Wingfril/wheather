@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from twilio.rest import Client
 import requests
 import zipcode
 import datetime
@@ -8,6 +9,10 @@ import datetime
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
+account_sid = "ACe9474fd5edc3229d83f5ccdc6a4a6102"
+auth_token = "3b6105ad11b08182c660ddd8d74c5168"
+
+client = Client(account_sid, auth_token)
 # renders the index page
 @app.route("/")
 def index():
@@ -27,6 +32,10 @@ def driver():
         return 'ERROR'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
+    client.api.account.messages.create(
+        to="+165075935653"
+        from_="+14159443803"
+        )
 
 def parser(location):
     ''' Parse the json for needed data'''
@@ -124,24 +133,24 @@ def languageOutput(weightedTempDays):
     output = ""
     day = weightedTempDays[0]
     if day[1]:
-        output += "It's raining today. Wear rain boots and bring an umbrella!"
+        output += "It's raining today. Wear rain boots and bring an umbrella!\n"
     elif day[2]:
         output += ""
     elif day[3]:
-        output += "It's snowing today. Wear snow boots."
+        output += "It's snowing today. Wear snow boots.\n"
     
     level = day[0]
     if level == 1:
-        output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots."
+        output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
-        output += "Wear a heavy jacket today"
+        output += "Wear a heavy jacket today\n"
     elif level == 3: 
-        output += "Wear a light jacket today"
+        output += "Wear a light jacket today\n"
     elif level == 4:
-        output += "It's warm today. Wear a t-shirt"
+        output += "It's warm today. Wear a t-shirt\n"
 
     if day[4]:
-        output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses."
+        output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses.\n"
     print(output)
     return output
 
