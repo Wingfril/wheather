@@ -55,7 +55,8 @@ def parser(location):
         condition = curHourData['icon']
         time = curHourData['time']
         apparentTemp = curHourData['apparentTemperature']
-        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition))
+        uvIndex = curHourData['uvIndex']
+        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition, uvIndex))
     return data
 
 def results(data):
@@ -74,46 +75,74 @@ def results(data):
     counter = 0
     for i in data:
         # it would be nice if we can associate the time of the rain/snow/etc
-        rain = False
-        sleet = False
-        snow = False
-        hour = i[0].hour
-        day = i[0].day
-        if counter >= 24:
-            counter = 0
-            # How do we calculate the weighted temperature??
-            # right now the placeholder for that is ...
-            # Winter coat, jacket, boots, gloves, hats
-            print(weightTemp)
-            weightTemp = sum(weightedTempOneDay)
-            weightedTempOneDay = []
-            level = 0
-            if weightTemp <= 40:
-                # winter coar and jacket
-                level = 1
-            if weightTemp <= 60:
-                # heavy coat
-                level = 2
-            if weightTemp <= 70:
-                # light jacket
-                level = 3
-            else:
-                # t shirt mannnnn
-                level = 4
-`           weightedTempDays.append((level, rain, sleet, snow))
-        weightedTempOneDay.append(weight[hour]*i[1])
-        if i[2] == 'rain':
-            rain = True
-        if i[2] == 'sleet':
-            sleet = True
-        if i[2] == 'snow':
-            snow = True
-        counter += 1
+        if counter <= 24:
+            rain = False
+            sleet = False
+            snow = False
+            uv = False
+            hour = i[0].hour
+            day = i[0].day
+            if counter == 24:
+                counter = 0
+                # How do we calculate the weighted temperature??
+                # right now the placeholder for that is ...
+                # Winter coat, jacket, boots, gloves, hats
+                print(weightTemp)
+                weightTemp = sum(weightedTempOneDay)
+                weightedTempOneDay = []
+                level = 0
+                if weightTemp <= 40:
+                    # winter coar and jacket
+                    level = 1
+                if weightTemp <= 60:
+                    # heavy coat
+                    level = 2
+                if weightTemp <= 70:
+                    # light jacket
+                    level = 3
+                else:
+                    # t shirt mannnnn
+                    level = 4
+                weightedTempDays.append((level, rain, sleet, snow, uv))
+
+            weightedTempOneDay.append(weight[hour]*i[1])
+            if i[3] > 5:
+                uv = True
+            if i[2] == 'rain':
+                rain = True
+            if i[2] == 'sleet':
+                sleet = True
+            if i[2] == 'snow':
+                snow = True
+            counter += 1
 
     return weightedTempDays
 
 def languageOutput(data):
     '''Need a way to output in grammatically correct sentences'''
+    output = ""
+    day = weightedTempDays[0]
+    if day.rain: 
+        output += "It's raining today. Wear rain boots and bring an umbrella!"
+    elif day.sleet: 
+        output += ""
+    elif day.snow: 
+        output += "It's snowing today. Wear snow boots."
+    
+    if level == 1:
+        output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots."
+    elif level == 2:
+        output += "Wear a heavy jacket today"
+    elif level == 3: 
+        output += "Wear a light jacket today"
+    elif level == 4:
+        output += "It's warm today. Wear a t-shirt"
+
+    if day.uv: 
+        output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses."
+
+    print(output)
+
 
 
 
