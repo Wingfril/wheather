@@ -1,5 +1,7 @@
 import React from "react";
 
+var $ = require('jquery');
+
 class Form extends React.Component {
   constructor(props) {
     super(props);
@@ -20,22 +22,31 @@ class Form extends React.Component {
     this.setState({zipcode: event.target.value});
   }
 
+  // handleSubmit(event) {
+  //   alert('A name was submitted: ' + this.state.phone);
+  //   event.preventDefault();
+  // }
+
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.value);
     event.preventDefault();
+    var data = {
+      phone: this.state.phone,
+      zipcode: this.state.zipcode
+    };
+    $.get(window.location.href + '_info', (data) => {
+      console.log(data);
+    })
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        <label>
-          Phone Number:
+        <p>Phone Number:</p>
           <input type="text" value={this.state.phone} onChange={this.handleChangePhone} />
-        </label>
-        <label>
-          Zip Code:
+        <br />
+        <p>Zip Code:</p>
           <input type="text" value={this.state.zipcode} onChange={this.handleChangeZip} />
-        </label>
+        <br />
         <input type="submit" value="Submit" />
       </form>
     );
