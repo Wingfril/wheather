@@ -15,7 +15,6 @@ client = Client(account_sid, auth_token)
 # renders the index page
 @app.route("/")
 def index():
-    print('here')
     return render_template("index.html")
 
 # renders the info/message page
@@ -23,7 +22,6 @@ def index():
 @app.route("/main")
 def submitted():
     # NEED CHANGING
-    print('here1')
     return render_template("index.html")
 
 

@@ -7,11 +7,6 @@ class App extends React.Component {
     return (
     <div>
         <h1>wheather wow</h1>
-        <p>Hello! wow</p>
-        <form>
-            <input type="text" name="number" placeholder="phone number" />
-            <input type="submit" value="submit" />
-        </form>
         <Form />
     </div>
     );
