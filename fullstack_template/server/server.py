@@ -35,11 +35,11 @@ def parser(location):
         return  'ERROR'
     lat = curZipcode.lat
     lon = curZipcode.lon
-    
+
     # API url
     url = 'https://api.darksky.net/forecast/73e7ea4a962e1d8c65470b15ceda0965/'
     url = url + str(lat) + ',' + str(lon)
-    
+
     # Calling the API and parsing it
     weather = get(url)
     if 'error' in weather:
@@ -59,17 +59,19 @@ def parser(location):
     return data
 
 def results(data):
-    '''This function looks at the apparent temperature, and decides the 
-        level of clothing needed. It will also note rainy, snowny, and sleey 
+    '''This function looks at the apparent temperature, and decides the
+        level of clothing needed. It will also note rainy, snowny, and sleey
         conditions'''
     weightedTempDays = []
     weightedTempOneDay = []
-    
+
     # Perhaps allow user to enter in when they sleep or are more active?
     # can just shift the weights easily.
-    weight = {0: 0.1, 1: 0.1, 2: 0.1, 3: 0.1, 4: 0.1, 5: 0.1, 6: 0.1, 7: 0.1, \
-    8: 0.2, 9: 0.2, 10: 0.3, 11: 0.5, 12: 0.7, 13: 0.7, 14: 0.7, 15: 0.7, \
-    16: 0.7, 17: 0.7, 18: 0.6, 19: 0.6, 20: 0.5, 21: 0.4, 22: 0.3, 23: 0.2}
+    N = 0.01
+    weight = {0: N*2, 1: N, 2: N, 3: N, 4: N, 5: N, 6: N*2, 7: N*2, \
+    8: N*2, 9: N*3, 10: N*4, 11: N*6, 12: N*8, 13: N*8, 14: N*8, 15: N*8, \
+    16: N*7, 17: N*7, 18: N*7, 19: N*6, 20: N*5, 21: N*4, 22: N*3, 23: N*3}
+    counter = 0
     for i in data:
         # it would be nice if we can associate the time of the rain/snow/etc
         rain = False
@@ -77,18 +79,20 @@ def results(data):
         snow = False
         hour = i[0].hour
         day = i[0].day
-        if curDay != day:
+        if counter >= 24:
+            counter = 0
             # How do we calculate the weighted temperature??
             # right now the placeholder for that is ...
             # Winter coat, jacket, boots, gloves, hats
+            weightTemp = sum(weightedTempOneDay)
             level = 0
-            if ... <= 40:
+            if weightTemp <= 40:
                 # winter coar and jacket
                 level = 1
-            if ... <= 60:
+            if weightTemp <= 60:
                 # heavy coat
                 level = 2
-            if ... <= 70:
+            if .weightTemp <= 70:
                 # light jacket
                 level = 3
             else:
@@ -102,6 +106,7 @@ def results(data):
             sleet = True
         if i[2] == 'snow':
             snow = True
+        counter += 1
 
     return weightedTempDays
 
