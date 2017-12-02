@@ -3,9 +3,10 @@ import requests
 import zipcode
 import datetime
 #import sqlalchemy
-# We can use google's cloud platform's cloud SQL for the database stuff
+# We can use google's cloud platform's cloud SQL for the database stuff?
 
-app = Flask(__name__, static_folder="../static/dist", template_folder="../static")
+app = Flask(__name__, static_folder="../static/dist", \
+            template_folder="../static")
 
 # renders the index page
 @app.route("/")
@@ -18,6 +19,12 @@ def submitted():
     # NEED CHANGING
     return render_template("index.html")
 
+
+def driver():
+    ''''''
+    data = parser(location)
+    weightedTempDays = results(data)
+    outputStrs = languageOutput(weightedTempDays)
 
 def parser(location):
     ''' Parse the json for needed data'''
