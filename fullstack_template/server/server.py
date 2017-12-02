@@ -33,7 +33,7 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
     client.api.account.messages.create(
-        to="+165075935653"
+        to="+165075935653",\
         from_="+14159443803"
         )
 
