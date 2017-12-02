@@ -32,11 +32,21 @@ def driver():
         return 'ERROR'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
+
+    # verifyNumber(phoneNumber)
+    
     client.api.account.messages.create(
         to=testNumber,\
         from_= fromNumber
         )
 
+# def verifyNumber(phoneNumber):
+#     validation_request = client.validation_requests \
+#                            .create("+14158675309",
+#                                    friendly_name="My Home Phone Number")
+
+#     print(validation_request.validation_code)
+    
 def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
