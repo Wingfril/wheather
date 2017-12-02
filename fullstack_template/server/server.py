@@ -30,7 +30,7 @@ def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
     # to use the api, we need to change it to lat/lon
-    curZipcode = zipcode.isequal(int(location))
+    curZipcode = zipcode.isequal(str(location))
     if curZipcode is None:
         return  'ERROR'
     lat = curZipcode.lat
@@ -55,7 +55,7 @@ def parser(location):
         condition = curHourData['icon']
         time = curHourData['time']
         apparentTemp = curHourData['apparentTemperature']
-        data.append((datetime.fromtimestamp(time), apparentTemp, condition))
+        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition))
     return data
 
 def results(data):
@@ -84,7 +84,9 @@ def results(data):
             # How do we calculate the weighted temperature??
             # right now the placeholder for that is ...
             # Winter coat, jacket, boots, gloves, hats
+            print(weightTemp)
             weightTemp = sum(weightedTempOneDay)
+            weightedTempOneDay = []
             level = 0
             if weightTemp <= 40:
                 # winter coar and jacket
@@ -92,7 +94,7 @@ def results(data):
             if weightTemp <= 60:
                 # heavy coat
                 level = 2
-            if .weightTemp <= 70:
+            if weightTemp <= 70:
                 # light jacket
                 level = 3
             else:
