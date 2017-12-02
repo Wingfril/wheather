@@ -23,6 +23,8 @@ def submitted():
 def driver():
     ''''''
     data = parser(location)
+    if data == 'ERROR':
+        return 'ERROR'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
@@ -87,7 +89,6 @@ def results(data):
                 # How do we calculate the weighted temperature??
                 # right now the placeholder for that is ...
                 # Winter coat, jacket, boots, gloves, hats
-                print(weightTemp)
                 weightTemp = sum(weightedTempOneDay)
                 weightedTempOneDay = []
                 level = 0
@@ -118,17 +119,18 @@ def results(data):
 
     return weightedTempDays
 
-def languageOutput(data):
+def languageOutput(weightedTempDays):
     '''Need a way to output in grammatically correct sentences'''
     output = ""
     day = weightedTempDays[0]
-    if day.rain: 
+    if day[1]:
         output += "It's raining today. Wear rain boots and bring an umbrella!"
-    elif day.sleet: 
+    elif day[2]:
         output += ""
-    elif day.snow: 
+    elif day[3]:
         output += "It's snowing today. Wear snow boots."
     
+    level = day[0]
     if level == 1:
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots."
     elif level == 2:
@@ -138,7 +140,7 @@ def languageOutput(data):
     elif level == 4:
         output += "It's warm today. Wear a t-shirt"
 
-    if day.uv: 
+    if day[4]:
         output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses."
 
     print(output)
