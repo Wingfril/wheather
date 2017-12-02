@@ -9,12 +9,13 @@ import sqlalchemy
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
-
+app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
 client = Client(account_sid, auth_token)
 # renders the index page
 @app.route("/")
 def index():
+    print('here')
     return render_template("index.html")
 
 # renders the info/message page
@@ -22,6 +23,7 @@ def index():
 @app.route("/main")
 def submitted():
     # NEED CHANGING
+    print('here1')
     return render_template("index.html")
 
 
@@ -189,4 +191,4 @@ def get(url):
         return False
 
 if __name__ == "__main__":
-	app.run()
+	app.run(debug=True)
