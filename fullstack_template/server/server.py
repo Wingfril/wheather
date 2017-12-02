@@ -154,6 +154,7 @@ def languageOutput(weightedTempDays):
     
     level = day[0]
     if level == 1:
+        # do we also want to print out what the average temp or high/low temp is? 
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
         output += "Wear a heavy jacket today\n"
@@ -163,6 +164,7 @@ def languageOutput(weightedTempDays):
         output += "It's warm today. Wear a t-shirt\n"
 
     if day[4]:
+        #do we want to print out what the UV index is/ what hours you should wear it
         output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses.\n"
     print(output)
     return output
