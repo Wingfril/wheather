@@ -33,20 +33,23 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
-    # verifyNumber(phoneNumber)
+    verifyNumber(phoneNumber)
     
+# @app.route("/sendMessage")   
+def sendMessage():
     client.api.account.messages.create(
-        to=testNumber,\
-        from_= fromNumber
+        to=phoneNumber,
+        from_= fromNumber,
+        body=outputStrs
         )
+def verifyNumber(phoneNumber):
+    validation_request = client.validation_requests \
+                           .create(phoneNumber)
+    # validation_request = client.validation_requests \
+    #                        .create(phoneNumber, None, None, None, "/sendMessage")
 
-# def verifyNumber(phoneNumber):
-#     validation_request = client.validation_requests \
-#                            .create("+14158675309",
-#                                    friendly_name="My Home Phone Number")
+    print(validation_request.validation_code)
 
-#     print(validation_request.validation_code)
-    
 def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
