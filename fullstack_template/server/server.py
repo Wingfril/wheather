@@ -142,8 +142,8 @@ def languageOutput(weightedTempDays):
 
     if day[4]:
         output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses."
-
     print(output)
+    return output
 
 
 
