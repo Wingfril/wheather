@@ -146,6 +146,8 @@ def languageOutput(weightedTempDays):
     return output
 
 
+
+
 # Get the jsoned weather data
 def get(url):
     try:
