@@ -30,22 +30,40 @@ class Form extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     var data = {
-      phone: this.state.phone,
+      phonenum: this.state.phone,
       zipcode: this.state.zipcode
     };
-    $.get(window.location.href + '_info', (data) => {
-      console.log(data);
-    })
+
+
+    $.ajax({
+      type:"POST",
+      url:$SCRIPT_ROOT + "/_info",
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      success: function(data) {
+        console.log(data);
+      },
+      error: function(data) {
+        console.log(data);
+      }
+    });
+
+    // console.log(data);
+    // $.get('/_info', (data) => {
+    //     console.log(data);
+    // })
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
         <p>Phone Number:</p>
-          <input type="text" value={this.state.phone} onChange={this.handleChangePhone} />
+          <input type="text" value={this.state.phone} 
+          placeholder="phone number" onChange={this.handleChangePhone} />
         <br />
         <p>Zip Code:</p>
-          <input type="text" value={this.state.zipcode} onChange={this.handleChangeZip} />
+          <input type="text" value={this.state.zipcode} 
+          placeholder="zip code" onChange={this.handleChangeZip} />
         <br />
         <input type="submit" value="Submit" />
       </form>

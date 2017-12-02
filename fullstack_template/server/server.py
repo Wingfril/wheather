@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from twilio.rest import Client
 from keys import *
 import requests
@@ -25,11 +25,12 @@ def submitted():
     return render_template("index.html")
 
 
-@app.route("/_info",  methods = ['POST'])
+@app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
     ''''''
-    phone_num = request.form['phone_num']
-    location = request.form['zipcode']
+    content = request.get_json()
+    phone_num = content['phonenum']
+    location = content['zipcode'] 
     '''
     if activeHours == None:
         sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
@@ -40,35 +41,36 @@ def driver():
     if data == 'ERROR':
         return 'ERROR'
     weightedTempDays = results(data)
-    outputStrs = languageOutput(weightedTempDays)
+    outputStr = languageOutput(weightedTempDays)
+    return outputStr
 
     #if phoneNumber == 
 
-@app.route("/_confirm", method = ['POST'])
-def confirm(VerificationStatus)
-    if VerificationStatus == "success":
-        return "You have successfully verified your phone number"
-    else:
-        return "Sorry, we were not able to verify your phone number. Please try again"
+# @app.route("/_confirm", method = ['POST'])
+# def confirm(VerificationStatus):
+#     if VerificationStatus == "success":
+#         return "You have successfully verified your phone number"
+#     else:
+#         return "Sorry, we were not able to verify your phone number. Please try again"
     
-@app.route("/_sendMessage", method = ['POST'])   
-def sendMessage():
+# @app.route("/_sendMessage", method = ['POST'])   
+# def sendMessage():
 
-    client.api.account.messages.create(
-        to=phoneNumber,
-        from_= fromNumber,
-        body=outputStrs
-        )
-    return 
+#     client.api.account.messages.create(
+#         to=phoneNumber,
+#         from_= fromNumber,
+#         body=outputStrs
+#         )
+#     return 
 
-@app.route("/_verifyNumber", method = ['POST'])
-def verifyNumber(phoneNumber):
-    # validation_request = client.validation_requests \
-    #                        .create(phoneNumber)
-    validation_request = client.validation_requests \
-                           .create(phoneNumber, None, None, None, "/_confirm")
+# @app.route("/_verifyNumber", method = ['POST'])
+# def verifyNumber(phoneNumber):
+#     # validation_request = client.validation_requests \
+#     #                        .create(phoneNumber)
+#     validation_request = client.validation_requests \
+#                            .create(phoneNumber, None, None, None, "/_confirm")
 
-    return validation_request.validation_code
+#     return validation_request.validation_code
 
 def parser(location):
     ''' Parse the json for needed data'''
@@ -76,7 +78,7 @@ def parser(location):
     # to use the api, we need to change it to lat/lon
     curZipcode = zipcode.isequal(str(location))
     if curZipcode is None:
-        return  'ERROR'
+        return 'ERROR'
     lat = curZipcode.lat
     lon = curZipcode.lon
 
