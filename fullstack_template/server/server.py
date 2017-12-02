@@ -4,8 +4,7 @@ from keys import *
 import requests
 import zipcode
 import datetime
-#import sqlalchemy
-# We can use google's cloud platform's cloud SQL for the database stuff?
+import sqlalchemy
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
@@ -20,6 +19,7 @@ def index():
     return render_template("index.html")
 
 # renders the info/message page
+
 @app.route("/main")
 def submitted():
     # NEED CHANGING
@@ -27,28 +27,38 @@ def submitted():
     return render_template("index.html")
 
 
+
 def driver():
     ''''''
+    '''
+    if activeHours == None:
+        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
+    else:
+        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
+    '''
     data = parser(location)
     if data == 'ERROR':
         return 'ERROR'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
-    # verifyNumber(phoneNumber)
+    verifyNumber(phoneNumber)
     
+# @app.route("/sendMessage")   
+def sendMessage():
     client.api.account.messages.create(
-        to=testNumber,\
-        from_= fromNumber
+        to=phoneNumber,
+        from_= fromNumber,
+        body=outputStrs
         )
+def verifyNumber(phoneNumber):
+    validation_request = client.validation_requests \
+                           .create(phoneNumber)
+    # validation_request = client.validation_requests \
+    #                        .create(phoneNumber, None, None, None, "/sendMessage")
 
-# def verifyNumber(phoneNumber):
-#     validation_request = client.validation_requests \
-#                            .create("+14158675309",
-#                                    friendly_name="My Home Phone Number")
+    print(validation_request.validation_code)
 
-#     print(validation_request.validation_code)
-    
 def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
@@ -153,6 +163,7 @@ def languageOutput(weightedTempDays):
     
     level = day[0]
     if level == 1:
+        # do we also want to print out what the average temp or high/low temp is? 
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
         output += "Wear a heavy jacket today\n"
@@ -162,6 +173,7 @@ def languageOutput(weightedTempDays):
         output += "It's warm today. Wear a t-shirt\n"
 
     if day[4]:
+        #do we want to print out what the UV index is/ what hours you should wear it
         output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses.\n"
     print(output)
     return output
