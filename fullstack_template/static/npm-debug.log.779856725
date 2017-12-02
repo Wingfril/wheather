@@ -1,0 +1,286 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save-dev',
+1 verbose cli   'webpacnpm',
+1 verbose cli   'install',
+1 verbose cli   'react',
+1 verbose cli   'react-dom',
+1 verbose cli   '--save-dev' ]
+2 info using npm@3.10.10
+3 info using node@v6.11.5
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData webpacnpm
+8 silly fetchPackageMetaData install
+9 silly fetchPackageMetaData react@^16.2.0
+10 silly fetchPackageMetaData react-dom@^16.2.0
+11 silly fetchNamedPackageData react
+12 silly mapToRegistry name react
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry data Result {
+15 silly mapToRegistry   raw: 'react',
+15 silly mapToRegistry   scope: null,
+15 silly mapToRegistry   escapedName: 'react',
+15 silly mapToRegistry   name: 'react',
+15 silly mapToRegistry   rawSpec: '',
+15 silly mapToRegistry   spec: 'latest',
+15 silly mapToRegistry   type: 'tag' }
+16 silly mapToRegistry uri https://registry.npmjs.org/react
+17 silly fetchNamedPackageData react-dom
+18 silly mapToRegistry name react-dom
+19 silly mapToRegistry using default registry
+20 silly mapToRegistry registry https://registry.npmjs.org/
+21 silly mapToRegistry data Result {
+21 silly mapToRegistry   raw: 'react-dom',
+21 silly mapToRegistry   scope: null,
+21 silly mapToRegistry   escapedName: 'react-dom',
+21 silly mapToRegistry   name: 'react-dom',
+21 silly mapToRegistry   rawSpec: '',
+21 silly mapToRegistry   spec: 'latest',
+21 silly mapToRegistry   type: 'tag' }
+22 silly mapToRegistry uri https://registry.npmjs.org/react-dom
+23 silly fetchNamedPackageData webpacnpm
+24 silly mapToRegistry name webpacnpm
+25 silly mapToRegistry using default registry
+26 silly mapToRegistry registry https://registry.npmjs.org/
+27 silly mapToRegistry data Result {
+27 silly mapToRegistry   raw: 'webpacnpm',
+27 silly mapToRegistry   scope: null,
+27 silly mapToRegistry   escapedName: 'webpacnpm',
+27 silly mapToRegistry   name: 'webpacnpm',
+27 silly mapToRegistry   rawSpec: '',
+27 silly mapToRegistry   spec: 'latest',
+27 silly mapToRegistry   type: 'tag' }
+28 silly mapToRegistry uri https://registry.npmjs.org/webpacnpm
+29 silly fetchNamedPackageData install
+30 silly mapToRegistry name install
+31 silly mapToRegistry using default registry
+32 silly mapToRegistry registry https://registry.npmjs.org/
+33 silly mapToRegistry data Result {
+33 silly mapToRegistry   raw: 'install',
+33 silly mapToRegistry   scope: null,
+33 silly mapToRegistry   escapedName: 'install',
+33 silly mapToRegistry   name: 'install',
+33 silly mapToRegistry   rawSpec: '',
+33 silly mapToRegistry   spec: 'latest',
+33 silly mapToRegistry   type: 'tag' }
+34 silly mapToRegistry uri https://registry.npmjs.org/install
+35 verbose request uri https://registry.npmjs.org/webpacnpm
+36 verbose request no auth needed
+37 info attempt registry request try #1 at 2:44:28 AM
+38 verbose request id 9f6c37a5ca20dda3
+39 http request GET https://registry.npmjs.org/webpacnpm
+40 verbose request uri https://registry.npmjs.org/install
+41 verbose request no auth needed
+42 info attempt registry request try #1 at 2:44:28 AM
+43 http request GET https://registry.npmjs.org/install
+44 verbose request uri https://registry.npmjs.org/react-dom
+45 verbose request no auth needed
+46 info attempt registry request try #1 at 2:44:28 AM
+47 verbose etag W/"59b2868b-1d8f2"
+48 verbose lastModified Fri, 08 Sep 2017 12:01:15 GMT
+49 http request GET https://registry.npmjs.org/react-dom
+50 verbose request uri https://registry.npmjs.org/react
+51 verbose request no auth needed
+52 info attempt registry request try #1 at 2:44:28 AM
+53 verbose etag W/"59b2867b-2f166"
+54 verbose lastModified Fri, 08 Sep 2017 12:00:59 GMT
+55 http request GET https://registry.npmjs.org/react
+56 http 200 https://registry.npmjs.org/install
+57 verbose headers { server: 'nginx/1.10.1',
+57 verbose headers   'content-type': 'application/json',
+57 verbose headers   'last-modified': 'Thu, 16 Nov 2017 22:24:25 GMT',
+57 verbose headers   etag: 'W/"5a0e1019-11fdf"',
+57 verbose headers   'content-encoding': 'gzip',
+57 verbose headers   'cache-control': 'max-age=300',
+57 verbose headers   'content-length': '8861',
+57 verbose headers   'accept-ranges': 'bytes',
+57 verbose headers   date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+57 verbose headers   via: '1.1 varnish',
+57 verbose headers   age: '0',
+57 verbose headers   connection: 'keep-alive',
+57 verbose headers   'x-served-by': 'cache-bos8232-BOS',
+57 verbose headers   'x-cache': 'MISS',
+57 verbose headers   'x-cache-hits': '0',
+57 verbose headers   'x-timer': 'S1512200673.185777,VS0,VE138',
+57 verbose headers   vary: 'Accept-Encoding, Accept' }
+58 silly get cb [ 200,
+58 silly get   { server: 'nginx/1.10.1',
+58 silly get     'content-type': 'application/json',
+58 silly get     'last-modified': 'Thu, 16 Nov 2017 22:24:25 GMT',
+58 silly get     etag: 'W/"5a0e1019-11fdf"',
+58 silly get     'content-encoding': 'gzip',
+58 silly get     'cache-control': 'max-age=300',
+58 silly get     'content-length': '8861',
+58 silly get     'accept-ranges': 'bytes',
+58 silly get     date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+58 silly get     via: '1.1 varnish',
+58 silly get     age: '0',
+58 silly get     connection: 'keep-alive',
+58 silly get     'x-served-by': 'cache-bos8232-BOS',
+58 silly get     'x-cache': 'MISS',
+58 silly get     'x-cache-hits': '0',
+58 silly get     'x-timer': 'S1512200673.185777,VS0,VE138',
+58 silly get     vary: 'Accept-Encoding, Accept' } ]
+59 verbose get saving install to /Users/ziyanmo/.npm/registry.npmjs.org/install/.cache.json
+60 verbose correctMkdir /Users/ziyanmo/.npm correctMkdir not in flight; initializing
+61 http 200 https://registry.npmjs.org/react-dom
+62 verbose headers { server: 'nginx/1.10.1',
+62 verbose headers   'content-type': 'application/json',
+62 verbose headers   'last-modified': 'Fri, 01 Dec 2017 17:24:02 GMT',
+62 verbose headers   etag: 'W/"5a219032-21735"',
+62 verbose headers   'content-encoding': 'gzip',
+62 verbose headers   'cache-control': 'max-age=300',
+62 verbose headers   'content-length': '12961',
+62 verbose headers   'accept-ranges': 'bytes',
+62 verbose headers   date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+62 verbose headers   via: '1.1 varnish',
+62 verbose headers   age: '0',
+62 verbose headers   connection: 'keep-alive',
+62 verbose headers   'x-served-by': 'cache-bos8231-BOS',
+62 verbose headers   'x-cache': 'HIT',
+62 verbose headers   'x-cache-hits': '1',
+62 verbose headers   'x-timer': 'S1512200673.189418,VS0,VE138',
+62 verbose headers   vary: 'Accept-Encoding, Accept' }
+63 silly get cb [ 200,
+63 silly get   { server: 'nginx/1.10.1',
+63 silly get     'content-type': 'application/json',
+63 silly get     'last-modified': 'Fri, 01 Dec 2017 17:24:02 GMT',
+63 silly get     etag: 'W/"5a219032-21735"',
+63 silly get     'content-encoding': 'gzip',
+63 silly get     'cache-control': 'max-age=300',
+63 silly get     'content-length': '12961',
+63 silly get     'accept-ranges': 'bytes',
+63 silly get     date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+63 silly get     via: '1.1 varnish',
+63 silly get     age: '0',
+63 silly get     connection: 'keep-alive',
+63 silly get     'x-served-by': 'cache-bos8231-BOS',
+63 silly get     'x-cache': 'HIT',
+63 silly get     'x-cache-hits': '1',
+63 silly get     'x-timer': 'S1512200673.189418,VS0,VE138',
+63 silly get     vary: 'Accept-Encoding, Accept' } ]
+64 verbose get saving react-dom to /Users/ziyanmo/.npm/registry.npmjs.org/react-dom/.cache.json
+65 verbose correctMkdir /Users/ziyanmo/.npm correctMkdir not in flight; initializing
+66 http 404 https://registry.npmjs.org/webpacnpm
+67 verbose headers { 'content-type': 'application/json',
+67 verbose headers   'cache-control': 'max-age=0',
+67 verbose headers   'content-length': '2',
+67 verbose headers   'accept-ranges': 'bytes',
+67 verbose headers   date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+67 verbose headers   via: '1.1 varnish',
+67 verbose headers   age: '0',
+67 verbose headers   connection: 'keep-alive',
+67 verbose headers   'x-served-by': 'cache-bos8227-BOS',
+67 verbose headers   'x-cache': 'MISS',
+67 verbose headers   'x-cache-hits': '0',
+67 verbose headers   'x-timer': 'S1512200673.189010,VS0,VE463',
+67 verbose headers   vary: 'Accept-Encoding' }
+68 silly get cb [ 404,
+68 silly get   { 'content-type': 'application/json',
+68 silly get     'cache-control': 'max-age=0',
+68 silly get     'content-length': '2',
+68 silly get     'accept-ranges': 'bytes',
+68 silly get     date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+68 silly get     via: '1.1 varnish',
+68 silly get     age: '0',
+68 silly get     connection: 'keep-alive',
+68 silly get     'x-served-by': 'cache-bos8227-BOS',
+68 silly get     'x-cache': 'MISS',
+68 silly get     'x-cache-hits': '0',
+68 silly get     'x-timer': 'S1512200673.189010,VS0,VE463',
+68 silly get     vary: 'Accept-Encoding' } ]
+69 silly fetchPackageMetaData Error: Registry returned 404 for GET on https://registry.npmjs.org/webpacnpm
+69 silly fetchPackageMetaData     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+69 silly fetchPackageMetaData     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:280:14)
+69 silly fetchPackageMetaData     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+69 silly fetchPackageMetaData     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:187:22)
+69 silly fetchPackageMetaData     at emitTwo (events.js:106:13)
+69 silly fetchPackageMetaData     at Request.emit (events.js:191:7)
+69 silly fetchPackageMetaData     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+69 silly fetchPackageMetaData     at emitOne (events.js:96:13)
+69 silly fetchPackageMetaData     at Request.emit (events.js:188:7)
+69 silly fetchPackageMetaData     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:969:12)
+69 silly fetchPackageMetaData  error for webpacnpm { Error: Registry returned 404 for GET on https://registry.npmjs.org/webpacnpm
+69 silly fetchPackageMetaData     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+69 silly fetchPackageMetaData     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:280:14)
+69 silly fetchPackageMetaData     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+69 silly fetchPackageMetaData     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:187:22)
+69 silly fetchPackageMetaData     at emitTwo (events.js:106:13)
+69 silly fetchPackageMetaData     at Request.emit (events.js:191:7)
+69 silly fetchPackageMetaData     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+69 silly fetchPackageMetaData     at emitOne (events.js:96:13)
+69 silly fetchPackageMetaData     at Request.emit (events.js:188:7)
+69 silly fetchPackageMetaData     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:969:12) pkgid: 'webpacnpm', statusCode: 404, code: 'E404' }
+70 http 200 https://registry.npmjs.org/react
+71 verbose headers { server: 'nginx/1.10.1',
+71 verbose headers   'content-type': 'application/json',
+71 verbose headers   'last-modified': 'Fri, 01 Dec 2017 17:23:59 GMT',
+71 verbose headers   etag: 'W/"5a21902f-32a98"',
+71 verbose headers   'content-encoding': 'gzip',
+71 verbose headers   'cache-control': 'max-age=300',
+71 verbose headers   'content-length': '20171',
+71 verbose headers   'accept-ranges': 'bytes',
+71 verbose headers   date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+71 verbose headers   via: '1.1 varnish',
+71 verbose headers   age: '0',
+71 verbose headers   connection: 'keep-alive',
+71 verbose headers   'x-served-by': 'cache-bos8235-BOS',
+71 verbose headers   'x-cache': 'HIT',
+71 verbose headers   'x-cache-hits': '1',
+71 verbose headers   'x-timer': 'S1512200673.189556,VS0,VE141',
+71 verbose headers   vary: 'Accept-Encoding, Accept' }
+72 silly get cb [ 200,
+72 silly get   { server: 'nginx/1.10.1',
+72 silly get     'content-type': 'application/json',
+72 silly get     'last-modified': 'Fri, 01 Dec 2017 17:23:59 GMT',
+72 silly get     etag: 'W/"5a21902f-32a98"',
+72 silly get     'content-encoding': 'gzip',
+72 silly get     'cache-control': 'max-age=300',
+72 silly get     'content-length': '20171',
+72 silly get     'accept-ranges': 'bytes',
+72 silly get     date: 'Sat, 02 Dec 2017 07:44:33 GMT',
+72 silly get     via: '1.1 varnish',
+72 silly get     age: '0',
+72 silly get     connection: 'keep-alive',
+72 silly get     'x-served-by': 'cache-bos8235-BOS',
+72 silly get     'x-cache': 'HIT',
+72 silly get     'x-cache-hits': '1',
+72 silly get     'x-timer': 'S1512200673.189556,VS0,VE141',
+72 silly get     vary: 'Accept-Encoding, Accept' } ]
+73 verbose get saving react to /Users/ziyanmo/.npm/registry.npmjs.org/react/.cache.json
+74 verbose correctMkdir /Users/ziyanmo/.npm correctMkdir not in flight; initializing
+75 silly rollbackFailedOptional Starting
+76 silly rollbackFailedOptional Finishing
+77 silly runTopLevelLifecycles Finishing
+78 silly install printInstalled
+79 verbose stack Error: Registry returned 404 for GET on https://registry.npmjs.org/webpacnpm
+79 verbose stack     at makeError (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+79 verbose stack     at CachingRegistryClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:280:14)
+79 verbose stack     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+79 verbose stack     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:187:22)
+79 verbose stack     at emitTwo (events.js:106:13)
+79 verbose stack     at Request.emit (events.js:191:7)
+79 verbose stack     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+79 verbose stack     at emitOne (events.js:96:13)
+79 verbose stack     at Request.emit (events.js:188:7)
+79 verbose stack     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:969:12)
+80 verbose statusCode 404
+81 verbose pkgid webpacnpm
+82 verbose cwd /Users/ziyanmo/Documents/GitHub/s/wheather/fullstack_template/static
+83 error Darwin 16.7.0
+84 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "install" "--save-dev" "webpacnpm" "install" "react" "react-dom" "--save-dev"
+85 error node v6.11.5
+86 error npm  v3.10.10
+87 error code E404
+88 error 404 Registry returned 404 for GET on https://registry.npmjs.org/webpacnpm
+89 error 404
+90 error 404 'webpacnpm' is not in the npm registry.
+91 error 404 You should bug the author to publish it (or use the name yourself!)
+92 error 404 Note that you can also install from a
+93 error 404 tarball, folder, http url, or git url.
+94 verbose exit [ 1, true ]

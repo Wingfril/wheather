@@ -33,6 +33,7 @@
   "homepage": "https://github.com/shawnaness/wheather#readme",
   "devDependencies": {
     "react": "^16.2.0",
-    "react-dom": "^16.2.0"
+    "react-dom": "^16.2.0",
+    "webpack": "^3.9.1"
   }
 }
