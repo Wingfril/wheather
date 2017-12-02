@@ -29,6 +29,7 @@ def submitted():
 def driver():
     ''''''
     '''
+    
     if activeHours == None:
         sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
     else:
