@@ -4,8 +4,7 @@ from keys import *
 import requests
 import zipcode
 import datetime
-#import sqlalchemy
-# We can use google's cloud platform's cloud SQL for the database stuff?
+import sqlalchemy
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
@@ -19,14 +18,22 @@ def index():
     return render_template("index.html")
 
 # renders the info/message page
+
 @app.route("/main")
 def submitted():
     # NEED CHANGING
     return render_template("index.html")
 
 
+
 def driver():
     ''''''
+    '''
+    if activeHours == None:
+        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
+    else:
+        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
+    '''
     data = parser(location)
     if data == 'ERROR':
         return 'ERROR'
