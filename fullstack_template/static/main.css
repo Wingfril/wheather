@@ -12,13 +12,17 @@ body {
 h1 {
 	color: white;
 	margin-top: 0;
-	padding: 100px;
+	padding-top: 100px;
+	padding-bottom: 30px;
 	font-size: 64px;
 	font-family: 'Pacifico', sans-serif;
 }
 
-h2 {
+h3 {
+	font-size: 24px;
 	color: white;
+	margin-top: 30% 0;
+	padding-bottom: 30px;
 }
 
 .box {
@@ -72,4 +76,24 @@ input[type=text] {
 	color: white;
 	display: inline-block;
 	text-align: center;
+}
+
+.return {
+	width: 120px;
+	height: 30px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 5px;
+	background: linear-gradient(to bottom, hsl(345, 80%, 55%), hsl(345, 80%, 35%));
+	color: white;
+	display: inline-block;
+	text-align: center;
+}
+
+.footer {
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	margin-right: 5px;
+	margin-bottom: 5px;
 }

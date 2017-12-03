@@ -36,9 +36,9 @@ class Form extends React.Component {
       contentType: 'application/json',
       success: (data) => {
         this.setState({message: data});
-        if (!(this.state.message === "")) {
-            window.location="submit.html";
-        }
+        if ((this.state.message === "")) {
+            window.location="submit";
+        };
       },
       error: (data) => {
         this.setState({message: data});
@@ -48,24 +48,30 @@ class Form extends React.Component {
 
   render() {
     return (
-      <div className = "box">
-        <form onSubmit={this.handleSubmit}>
-          <p>Phone Number:</p>
-            <div className='phone_number'>
-              <div className='country_code'>
-              +1
+      <div>
+        <h3>Not quite sure if it's sweater weather? Let us help you out!</h3>
+        <div className = "box">
+          <form onSubmit={this.handleSubmit}>
+            <p>Phone Number:</p>
+              <div className='phone_number'>
+                <div className='country_code'>
+                +1
+                </div>
+                <input type="text" value={this.state.phone} 
+                onChange={this.handleChangePhone} />
               </div>
-              <input type="text" value={this.state.phone} 
-              onChange={this.handleChangePhone} />
-            </div>
-          <br />
-          <p>Zip Code:</p>
-            <input type="text" value={this.state.zipcode} 
-            onChange={this.handleChangeZip} />
-          <br />
-          <input className="button" type="submit" value="Submit" />
-        </form>
-        <p>{this.state.message}</p>
+            <br />
+            <p>Zip Code:</p>
+              <input type="text" value={this.state.zipcode} 
+              onChange={this.handleChangeZip} />
+            <br />
+            <input className="button" type="submit" value="Submit" />
+          </form>
+          <p>{this.state.message}</p>
+        </div>
+        <div className='footer'>
+          <p>&copy; 2017 Shawna Huang, Ziyan Mo, Huayu Ouyang</p>
+        </div>
       </div>
     );
   }
