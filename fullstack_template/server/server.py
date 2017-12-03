@@ -6,33 +6,31 @@ import zipcode
 import datetime
 # import sqlalchemy
 import os
-import threading
-import multiprocessing
-import math
 # import pymysql
+import schedule
+import time
+import threading
 # pymysql.install_as_MySQLdb()
-# from flask_sqlalchemy import SQLAlchemy
 
 from uszipcode import ZipcodeSearchEngine
+
+import multiprocessing
+import math
+
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+
 # db = SQLAlchemy(app)
 
 client = Client(account_sid, auth_token)
 
-# class phoneNum(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     phonenum = db.Column(db.String(20))
-#     zipcode = db.Column(db.String(6))
 
-#     def __init__(self, phonenum, zipcode):
-#         self.zipcode = zipcode
-#         self.phonenum = phonenum
 
 # renders the index page
 @app.route("/")
@@ -49,10 +47,12 @@ def submitted():
 @app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
 
+
     content = request.get_json()
     phone_num = "+1" + content['phonenum']
     location = content['zipcode'] 
     # pair = phoneNum(phonenum = phone_num, zipcode = location)
+
     # db.session.add(pair)
     # db.session.commit()
 
@@ -73,7 +73,24 @@ def driver():
         from_=fromNumber,
         body=outputStrs
         )
+    schedule.every(1).minutes.do(sendMessage, phone_num, location)
     return ""
+
+def sendMessage(phone_num, location):
+    data = parser(location)
+    if data == 'ERROR':
+        return 'ERROR'
+    weightedTempDays = results(data)
+    outputStrs = languageOutput(weightedTempDays)
+
+
+    #if phoneNumber ==
+
+    client.api.account.messages.create(
+        to= phone_num,
+        from_= fromNumber,
+        body=outputStrs
+        )
 
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
@@ -235,31 +252,38 @@ def get(url):
     except:
         return False
 
-@app.route('/checkTime')
-def starting():
-    backProc = multiprocessing.Process(target=checkTime, args=(), daemon=True)
-    backProc.start()
-    return 'hi'
 
-def checkTime():
-    time = datetime.datetime.now()
-    print(time)
+@app.before_first_request
+def activate_job():
+    def run_job():
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    thread = threading.Thread(target= run_job)
+    thread.start()
 
-def startWebserver():
-    app.run(debug=True, use_reloader=False)
+def start_runner():
+    def start_loop():
+        not_started = True
+        while not_started:
+            print('In start loop')
+            try:
+                r = requests.get('http://127.0.0.1:5000/')
+                if r.status_code == 200:
+                    print('Server started, quiting start_loop')
+                    not_started = False
+                print(r.status_code)
+            except:
+                print('Server not yet started')
+            time.sleep(2)
+
+    print('Started runner')
+    thread = threading.Thread(target=start_loop)
+    thread.start()
 if __name__ == "__main__":
-    '''    appThread = threading.Thread(target = startWebserver)
-    schedulerThread = threading.Thread(target=checkTime)
-    lock1 = threading.Lock()
-    lock2 = threading.Lock()
-    schedulerThread.start()
-    appThread.start()
 
-    while True:
-        lock1.acquire()
-        lock1.release()
-        lock2.acquire()
-        lock2.release()
-'''
     app.run(threaded=True, use_reloader=False)
-#checkTime()
+=======
+    start_runner()
+    app.run(debug=True)
+
