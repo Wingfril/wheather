@@ -3,7 +3,7 @@ body {
 	font-family: 'Sarala', sans-serif;
 	border-top: 5px solid;
 	border-color: hsl(345, 80%, 55%);
-	background-image: url(62bca5f2fdd5e372b192f0c08f600ac6.png);
+	background-image: url(6f91d663526ab2617f220040608c1b4f.png);
 	background-size: auto 100vh;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -17,7 +17,11 @@ h1 {
 	font-family: 'Pacifico', sans-serif;
 }
 
-.form {
+h2 {
+	color: white;
+}
+
+.box {
 	padding: 30px;
 	width: 300px;
 	margin: auto;

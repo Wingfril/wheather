@@ -36,6 +36,9 @@ class Form extends React.Component {
       contentType: 'application/json',
       success: (data) => {
         this.setState({message: data});
+        if (!(this.state.message === "")) {
+            window.location="submit.html";
+        }
       },
       error: (data) => {
         this.setState({message: data});
@@ -45,7 +48,7 @@ class Form extends React.Component {
 
   render() {
     return (
-      <div className = "form">
+      <div className = "box">
         <form onSubmit={this.handleSubmit}>
           <p>Phone Number:</p>
             <div className='phone_number'>

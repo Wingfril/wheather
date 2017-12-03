@@ -17,7 +17,11 @@ h1 {
 	font-family: 'Pacifico', sans-serif;
 }
 
-.form {
+h2 {
+	color: white;
+}
+
+.box {
 	padding: 30px;
 	width: 300px;
 	margin: auto;
@@ -40,7 +44,7 @@ p {
 }
 
 .country_code {
-	color: white;
+	color: #d3d3d3;
 	display: inline;
 	position: absolute;
 }
