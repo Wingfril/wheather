@@ -7,7 +7,9 @@ import datetime
 import sqlalchemy
 import os
 import pymysql
+import threading
 pymysql.install_as_MySQLdb()
+import multiprocessing
 
 from uszipcode import ZipcodeSearchEngine
 
@@ -234,8 +236,6 @@ def languageOutput(weightedTempDays):
     return output
 
 
-
-
 # Get the jsoned weather data
 def get(url):
     try:
@@ -244,5 +244,31 @@ def get(url):
     except:
         return False
 
+@app.route('/checkTime')
+def starting():
+    backProc = multiprocessing.Process(target=checkTime, args=(), daemon=True)
+    backProc.start()
+    return 'hi'
+
+def checkTime():
+    time = datetime.datetime.now()
+    print(time)
+
+def startWebserver():
+    app.run(debug=True, use_reloader=False)
 if __name__ == "__main__":
-	app.run(debug=True)
+    appThread = threading.Thread(target = startWebserver)
+    schedulerThread = threading.Thread(target=checkTime)
+    lock1 = threading.Lock()
+    lock2 = threading.Lock()
+    schedulerThread.start()
+    appThread.start()
+
+    while True:
+        lock1.acquire()
+        lock1.release()
+        lock2.acquire()
+        lock2.release()
+
+#app.run(threaded=True, use_reloader=False)
+#checkTime()
