@@ -77,7 +77,7 @@ def driver():
         body=outputStrs
         )
     # schedule.every(1).minutes.do(sendMessage, phone_num, location)
-    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
+    schedule.every().day.at("11:00").do(sendMessage, phone_num, location)
     return ""
 
 def sendMessage(phone_num, location):
@@ -187,6 +187,8 @@ def results(data):
                 # How do we calculate the weighted temperature??
                 # right now the placeholder for that is ...
                 # Winter coat, jacket, boots, gloves, hats
+                print(weightedTempOneDay)
+                
                 weightTemp = sum(weightedTempOneDay)
                 weightedTempOneDay = []
                 level = 0
@@ -203,8 +205,7 @@ def results(data):
                     # t shirt mannnnn
                     level = 4
                     # i[1] is apparent temp, i[4] is city
-                weightedTempDays.append((level, rain, sleet, snow, uv, i[1], i[4]))
-
+                weightedTempDays.append((level, rain, sleet, snow, uv, weightTemp, i[4]))
             weightedTempOneDay.append(weight[hour]*i[1])
             if i[3] > 5:
                 uv = True
@@ -215,7 +216,6 @@ def results(data):
             if i[2] == 'snow':
                 snow = True
             counter += 1
-
     return weightedTempDays
 
 def languageOutput(weightedTempDays):
@@ -271,7 +271,7 @@ def start_runner():
         while not_started:
             print('In start loop')
             try:
-                r = requests.get('http://127.0.0.1:5000/')
+                r = requests.get('http://moonlit-creek-187814.appspot.com/')
                 if r.status_code == 200:
                     print('Server started, quitting start_loop')
                     not_started = False
