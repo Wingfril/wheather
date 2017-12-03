@@ -16,7 +16,7 @@ from uszipcode import ZipcodeSearchEngine
 
 import multiprocessing
 import math
-
+import logging
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")

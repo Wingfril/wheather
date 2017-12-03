@@ -1,9 +1,12 @@
-python == 3.6
+Flask==0.11.1
+gunicorn==19.6.0
 zipcode
 requests
 twilio
-flask
+
 datetime
 sqlalchemy
 pymysql
 schedule
+uszipcode
+multiprocessing
