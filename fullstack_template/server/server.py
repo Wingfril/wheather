@@ -44,22 +44,33 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
-    verifyNumber(phoneNumber)
+    #if phoneNumber == 
+
+@app.route("/_confirm", method = ['POST'])
+def confirm(VerificationStatus)
+    if VerificationStatus == "success":
+        return "You have successfully verified your phone number"
+    else:
+        return "Sorry, we were not able to verify your phone number. Please try again"
     
-# @app.route("/sendMessage")   
+@app.route("/_sendMessage", method = ['POST'])   
 def sendMessage():
+
     client.api.account.messages.create(
         to=phoneNumber,
         from_= fromNumber,
         body=outputStrs
         )
-def verifyNumber(phoneNumber):
-    validation_request = client.validation_requests \
-                           .create(phoneNumber)
-    # validation_request = client.validation_requests \
-    #                        .create(phoneNumber, None, None, None, "/sendMessage")
+    return 
 
-    print(validation_request.validation_code)
+@app.route("/_verifyNumber", method = ['POST'])
+def verifyNumber(phoneNumber):
+    # validation_request = client.validation_requests \
+    #                        .create(phoneNumber)
+    validation_request = client.validation_requests \
+                           .create(phoneNumber, None, None, None, "/_sendMessage")
+
+    return validation_request.validation_code
 
 def parser(location):
     ''' Parse the json for needed data'''
