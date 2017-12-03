@@ -30,7 +30,6 @@ class phoneNum(db.Model):
 # renders the index page
 @app.route("/")
 def index():
-    print('here')
     return render_template("index.html")
 
 # renders the info/message page
@@ -38,7 +37,6 @@ def index():
 @app.route("/main")
 def submitted():
     # NEED CHANGING
-    print('here1')
     return render_template("index.html")
 
 
@@ -62,7 +60,16 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
+
     #if phoneNumber ==
+
+    client.api.account.messages.create(
+        to=phoneNumber,
+        from_= fromNumber,
+        body=outputStrs
+        )
+    return outputStrs
+
 
 @app.route("/_confirm", method = ['POST'])
 def confirm(VerificationStatus)
