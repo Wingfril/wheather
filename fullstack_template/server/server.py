@@ -62,6 +62,9 @@ def driver():
     else:
         db.session.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
     '''
+    if not content['phonenum'].isdigit() or len(content['phonenum']) != 10:
+        return 'Please enter a valid US phone number with the area code.'
+
     data = parser(location)
     if data == 'ERROR':
         return 'Sorry, we couldn\'t locate your zipcode. Try another one nearby.'
