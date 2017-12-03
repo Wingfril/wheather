@@ -68,7 +68,7 @@ def verifyNumber(phoneNumber):
     # validation_request = client.validation_requests \
     #                        .create(phoneNumber)
     validation_request = client.validation_requests \
-                           .create(phoneNumber, None, None, None, "/_sendMessage")
+                           .create(phoneNumber, None, None, None, "/_confirm")
 
     return validation_request.validation_code
 
