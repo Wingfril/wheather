@@ -30,9 +30,10 @@ h3 {
 	width: 300px;
 	margin: auto;
 	background-color: rgba(0, 0, 0, 0.6);
+	border-top: 4px solid;	
+	border-color: hsl(345, 80%, 55%);
 }
 
-/* mess with width of input boxes */
 
 p {
 	color: white;
