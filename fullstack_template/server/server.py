@@ -248,7 +248,7 @@ def checkTime():
 def startWebserver():
     app.run(debug=True, use_reloader=False)
 if __name__ == "__main__":
-'''    appThread = threading.Thread(target = startWebserver)
+    '''    appThread = threading.Thread(target = startWebserver)
     schedulerThread = threading.Thread(target=checkTime)
     lock1 = threading.Lock()
     lock2 = threading.Lock()
