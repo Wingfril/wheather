@@ -192,13 +192,13 @@ def results(data):
                 weightTemp = sum(weightedTempOneDay)
                 weightedTempOneDay = []
                 level = 0
-                if weightTemp < 40:
+                if weightTemp <= 39:
                     # winter coar and jacket
                     level = 1
-                elif weightTemp < 60:
+                elif weightTemp <= 59:
                     # heavy coat
                     level = 2
-                elif weightTemp < 70:
+                elif weightTemp <= 69:
                     # light jacket
                     level = 3
                 else:
