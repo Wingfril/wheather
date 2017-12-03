@@ -284,7 +284,6 @@ def start_runner():
 if __name__ == "__main__":
 
     app.run(threaded=True, use_reloader=False)
-=======
     start_runner()
     app.run(debug=True)
 
