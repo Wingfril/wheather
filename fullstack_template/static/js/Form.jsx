@@ -62,7 +62,7 @@ class Form extends React.Component {
           <br />
           <input className="button" type="submit" value="Submit" />
         </form>
-        <h2>{this.state.message}</h2>
+        <p>{this.state.message}</p>
       </div>
     );
   }

@@ -71,7 +71,7 @@ def driver():
         from_=fromNumber,
         body=outputStrs
         )
-    return outputStrs
+    return ""
 
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
@@ -199,7 +199,7 @@ def languageOutput(weightedTempDays):
     print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
     day = weightedTempDays[0]    
-    output = "It feels like " + str(round(day[5])) + "F" + " in " + day[6] + " today."
+    output = "It feels like " + str(round(day[5])) + "F" + " in " + day[6] + " today. "
     if day[1]:
         output += "It's raining today. Wear rain boots and bring an umbrella!\n"
     elif day[2]:
