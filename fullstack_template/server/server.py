@@ -5,13 +5,28 @@ import requests
 import zipcode
 import datetime
 import sqlalchemy
+import os
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+db = SQLAlchemy(app)
+
 client = Client(account_sid, auth_token)
+
+class phoneNum(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    phonenum = db.Column(db.String(20))
+    zipcode = db.Column(db.String(6))
+
+    def __init__(self, phonenum, zipcode):
+        self.zipcode = zipcode
+        self.phonenum = phonenum
+
 # renders the index page
 @app.route("/")
 def index():
@@ -32,11 +47,14 @@ def driver():
     ''''''
     phone_num = request.form['phone_num']
     location = request.form['zipcode']
+    pair = phoneNum(phonenum = phone_num, zipcode = location)
+    db.session.add(pair)
+    db.session.commit()
     '''
     if activeHours == None:
-        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
+        db.session.insert(user).values(phone_num = phoneNumber, lastLocation = location)
     else:
-        sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
+        db.session.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
     '''
     data = parser(location)
     if data == 'ERROR':
@@ -44,7 +62,7 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
-    #if phoneNumber == 
+    #if phoneNumber ==
 
 @app.route("/_confirm", method = ['POST'])
 def confirm(VerificationStatus)
@@ -52,8 +70,8 @@ def confirm(VerificationStatus)
         return "You have successfully verified your phone number"
     else:
         return "Sorry, we were not able to verify your phone number. Please try again"
-    
-@app.route("/_sendMessage", method = ['POST'])   
+
+@app.route("/_sendMessage", method = ['POST'])
 def sendMessage():
 
     client.api.account.messages.create(
@@ -61,14 +79,14 @@ def sendMessage():
         from_= fromNumber,
         body=outputStrs
         )
-    return 
+    return
 
 @app.route("/_verifyNumber", method = ['POST'])
 def verifyNumber(phoneNumber):
     # validation_request = client.validation_requests \
     #                        .create(phoneNumber)
     validation_request = client.validation_requests \
-                           .create(phoneNumber, None, None, None, "/_confirm")
+                           .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
 
     return validation_request.validation_code
 
@@ -173,14 +191,14 @@ def languageOutput(weightedTempDays):
         output += ""
     elif day[3]:
         output += "It's snowing today. Wear snow boots.\n"
-    
+
     level = day[0]
     if level == 1:
-        # do we also want to print out what the average temp or high/low temp is? 
+        # do we also want to print out what the average temp or high/low temp is?
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
         output += "Wear a heavy jacket today\n"
-    elif level == 3: 
+    elif level == 3:
         output += "Wear a light jacket today\n"
     elif level == 4:
         output += "It's warm today. Wear a t-shirt\n"
