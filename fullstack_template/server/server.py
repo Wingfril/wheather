@@ -281,5 +281,6 @@ def start_runner():
     thread = threading.Thread(target=start_loop)
     thread.start()
 if __name__ == "__main__":
+
     start_runner()
     app.run(debug=True)

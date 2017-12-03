@@ -1,9 +1,0 @@
-
-zipcode
-requests
-twilio
-flask
-datetime
-sqlalchemy
-pymysql
-schedule

@@ -1,0 +1,9 @@
+python == 3.6
+zipcode
+requests
+twilio
+flask
+datetime
+sqlalchemy
+pymysql
+schedule
