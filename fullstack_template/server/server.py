@@ -39,9 +39,9 @@ def index():
 
 # renders the info/message page
 @app.route("/submit")
-def submitted():
+def submit():
     # NEED CHANGING
-    return render_template("index.html")
+    return render_template("submit.html")
 
 
 @app.route("/_info",  methods = ['GET', 'POST'])
@@ -199,28 +199,27 @@ def languageOutput(weightedTempDays):
     print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
     day = weightedTempDays[0]    
-    output = "It feels like " + str(round(day[5])) + "F" + " in " + day[6] + " today. "
-    if day[1]:
-        output += "It's raining today. Wear rain boots and bring an umbrella!\n"
-    elif day[2]:
-        output += "Looks like sleet today. Wear boots!"
-    elif day[3]:
-        output += "It's snowing today. Wear snow boots.\n"
-
+    output = "It'll be about " + str(int(round(day[5]))) + "F" + " in " + day[6] + " today. "
     level = day[0]
     if level == 1:
         # do we also want to print out what the average temp or high/low temp is?
-        output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
+        output += "You should bundle up with a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
-        output += "It's pretty cold today - wear a heavy jacket!\n"
+        output += "You should probably wear a heavy jacket.\n"
     elif level == 3:
-        output += "It's a bit chilly out. Wear a light jacket today.\n"
+        output += "A light jacket should be sufficient.\n"
     elif level == 4:
-        output += "It's warm today - t-shirt and shorts weather!\n"
+        output += "It's t-shirt and shorts weather!\n"
 
+    if day[1]:
+        output += "It also looks like there might be rain, so wear rain boots and bring an umbrella!\n"
+    elif day[2]:
+        output += "It also looks like sleet today - wear snow boots!\n"
+    elif day[3]:
+        output += "It also might snow today - don't forget your hat and snow boots!\n"
     if day[4]:
         #do we want to print out what the UV index is/ what hours you should wear it
-        output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses.\n"
+        output += "There's also a high UV index. Make sure to wear sunscreen, a hat, and sunglasses!\n"
     print(output)
     return output
 
@@ -236,4 +235,4 @@ def get(url):
         return False
 
 if __name__ == "__main__":
-	app.run(debug=True)
+    app.run(debug=True)
