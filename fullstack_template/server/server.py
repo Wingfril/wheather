@@ -73,6 +73,7 @@ def driver():
         from_=fromNumber,
         body=outputStrs
         )
+    schedule.every(1).minutes.do(sendMessage, phone_num, location)
     return ""
 
 def sendMessage(phone_num, location):
@@ -251,7 +252,7 @@ def get(url):
     except:
         return False
 
-<<<<<<< HEAD
+
 @app.before_first_request
 def activate_job():
     def run_job():
