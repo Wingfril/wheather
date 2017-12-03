@@ -1,0 +1,3 @@
+entrypoint: python2 server/server.py
+env: flex
+runtime: python
