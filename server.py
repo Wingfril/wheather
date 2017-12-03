@@ -16,14 +16,12 @@ from uszipcode import ZipcodeSearchEngine
 
 import multiprocessing
 import math
-import logging
+
 
 app = Flask(__name__, static_folder="fullstack_template/static/dist", \
             template_folder="fullstack_template/static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
-app.config['ASK_VERIFY_REQUESTS'] = False
-
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
@@ -64,6 +62,9 @@ def driver():
     else:
         db.session.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location, hours_awake  =activeHours)
     '''
+    if not content['phonenum'].isdigit() or len(content['phonenum']) != 10:
+        return 'Please enter a valid US phone number with the area code.'
+
     data = parser(location)
     if data == 'ERROR':
         return 'Sorry, we couldn\'t locate your zipcode. Try another one nearby.'
