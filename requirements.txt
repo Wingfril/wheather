@@ -3,7 +3,6 @@ gunicorn==19.6.0
 zipcode
 requests
 twilio
-
 datetime
 sqlalchemy
 pymysql

@@ -18,10 +18,12 @@ import multiprocessing
 import math
 import logging
 
-app = Flask(__name__, static_folder="../static/dist", \
-            template_folder="../static")
+app = Flask(__name__, static_folder="fullstack_template/static/dist", \
+            template_folder="fullstack_template/static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
+app.config['ASK_VERIFY_REQUESTS'] = False
+
 
 
 # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
