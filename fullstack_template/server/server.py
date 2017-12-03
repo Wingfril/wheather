@@ -73,7 +73,8 @@ def driver():
         from_=fromNumber,
         body=outputStrs
         )
-    schedule.every(1).minutes.do(sendMessage, phone_num, location)
+    # schedule.every(1).minutes.do(sendMessage, phone_num, location)
+    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
     return ""
 
 def sendMessage(phone_num, location):
