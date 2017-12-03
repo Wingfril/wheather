@@ -27,11 +27,12 @@ def submitted():
     return render_template("index.html")
 
 
-
+@app.route("/_info",  methods = ['POST'])
 def driver():
     ''''''
+    phone_num = request.form['phone_num']
+    location = request.form['zipcode']
     '''
-    
     if activeHours == None:
         sqlalchemy.sql.insert(user).values(phone_num = phoneNumber, lastLocation = location)
     else:
