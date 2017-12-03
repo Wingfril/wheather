@@ -270,7 +270,7 @@ def start_runner():
             try:
                 r = requests.get('http://127.0.0.1:5000/')
                 if r.status_code == 200:
-                    print('Server started, quiting start_loop')
+                    print('Server started, quitting start_loop')
                     not_started = False
                 print(r.status_code)
             except:
