@@ -1,12 +1,14 @@
 import React from "react";
 import Form from "./Form";
-
+// import '../main.css';
 
 class App extends React.Component {
   render () {
     return (
     <div>
-        <h1>wheather wow</h1>
+    	<div className='header'>
+        	<h1>wheather</h1>
+        </div>
         <Form />
     </div>
     );

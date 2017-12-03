@@ -4,28 +4,33 @@ from keys import *
 import requests
 import zipcode
 import datetime
-import sqlalchemy
+# import sqlalchemy
 import os
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
+
+from uszipcode import ZipcodeSearchEngine
+
+city = ""
+temperature = ""
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
-db = SQLAlchemy(app)
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+# db = SQLAlchemy(app)
 
 client = Client(account_sid, auth_token)
 
-class phoneNum(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    phonenum = db.Column(db.String(20))
-    zipcode = db.Column(db.String(6))
+# class phoneNum(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     phonenum = db.Column(db.String(20))
+#     zipcode = db.Column(db.String(6))
 
-    def __init__(self, phonenum, zipcode):
-        self.zipcode = zipcode
-        self.phonenum = phonenum
+#     def __init__(self, phonenum, zipcode):
+#         self.zipcode = zipcode
+#         self.phonenum = phonenum
 
 # renders the index page
 @app.route("/")
@@ -42,18 +47,12 @@ def submitted():
 
 @app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
-    ''''''
-<<<<<<< HEAD
     content = request.get_json()
-    phone_num = content['phonenum']
+    phone_num = "+1" + content['phonenum']
     location = content['zipcode'] 
-=======
-    phone_num = request.form['phone_num']
-    location = request.form['zipcode']
-    pair = phoneNum(phonenum = phone_num, zipcode = location)
-    db.session.add(pair)
-    db.session.commit()
->>>>>>> b2a3989b85dd5ef87d8677132a131a258887b474
+    # pair = phoneNum(phonenum = phone_num, zipcode = location)
+    # db.session.add(pair)
+    # db.session.commit()
     '''
     if activeHours == None:
         db.session.insert(user).values(phone_num = phoneNumber, lastLocation = location)
@@ -62,7 +61,7 @@ def driver():
     '''
     data = parser(location)
     if data == 'ERROR':
-        return 'ERROR'
+        return 'Sorry, we couldn\'t locate your zipcode. Try another one nearby.'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
@@ -70,14 +69,12 @@ def driver():
     #if phoneNumber ==
 
     client.api.account.messages.create(
-        to=phoneNumber,
-        from_= fromNumber,
+        to=phone_num,
+        from_=fromNumber,
         body=outputStrs
         )
     return outputStrs
 
-
-<<<<<<< HEAD
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
 #     if VerificationStatus == "success":
@@ -100,32 +97,7 @@ def driver():
 #     # validation_request = client.validation_requests \
 #     #                        .create(phoneNumber)
 #     validation_request = client.validation_requests \
-#                            .create(phoneNumber, None, None, None, "/_confirm")
-=======
-@app.route("/_confirm", method = ['POST'])
-def confirm(VerificationStatus)
-    if VerificationStatus == "success":
-        return "You have successfully verified your phone number"
-    else:
-        return "Sorry, we were not able to verify your phone number. Please try again"
-
-@app.route("/_sendMessage", method = ['POST'])
-def sendMessage():
-
-    client.api.account.messages.create(
-        to=phoneNumber,
-        from_= fromNumber,
-        body=outputStrs
-        )
-    return
-
-@app.route("/_verifyNumber", method = ['POST'])
-def verifyNumber(phoneNumber):
-    # validation_request = client.validation_requests \
-    #                        .create(phoneNumber)
-    validation_request = client.validation_requests \
-                           .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
->>>>>>> b2a3989b85dd5ef87d8677132a131a258887b474
+#                            .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
 
 #     return validation_request.validation_code
 
@@ -133,11 +105,14 @@ def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
     # to use the api, we need to change it to lat/lon
-    curZipcode = zipcode.isequal(str(location))
+    search = ZipcodeSearchEngine()
+    curZipcode = search.by_zipcode(location)
+    print(curZipcode)
     if curZipcode is None:
         return 'ERROR'
-    lat = curZipcode.lat
-    lon = curZipcode.lon
+    lat = curZipcode['Latitude']
+    lon = curZipcode['Longitude']
+    city = curZipcode['City']
 
     # API url
     url = 'https://api.darksky.net/forecast/73e7ea4a962e1d8c65470b15ceda0965/'
@@ -146,7 +121,7 @@ def parser(location):
     # Calling the API and parsing it
     weather = get(url)
     if 'error' in weather:
-        return  'ERROR'
+        return 'ERROR'
     totalHourlyInfo = weather['hourly']
     hourlyData = totalHourlyInfo['data']
     # This is the relevent hourly data for the current location
@@ -221,13 +196,14 @@ def results(data):
     return weightedTempDays
 
 def languageOutput(weightedTempDays):
+    print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
     output = ""
     day = weightedTempDays[0]
     if day[1]:
         output += "It's raining today. Wear rain boots and bring an umbrella!\n"
     elif day[2]:
-        output += ""
+        output += "Looks like sleet today. Wear boots!"
     elif day[3]:
         output += "It's snowing today. Wear snow boots.\n"
 
@@ -236,11 +212,11 @@ def languageOutput(weightedTempDays):
         # do we also want to print out what the average temp or high/low temp is?
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
-        output += "Wear a heavy jacket today\n"
+        output += "It's pretty cold today - wear a heavy jacket!\n"
     elif level == 3:
-        output += "Wear a light jacket today\n"
+        output += "It's a bit chilly out. Wear a light jacket today.\n"
     elif level == 4:
-        output += "It's warm today. Wear a t-shirt\n"
+        output += "It's warm today - t-shirt and shorts weather!\n"
 
     if day[4]:
         #do we want to print out what the UV index is/ what hours you should wear it
