@@ -6,6 +6,11 @@ import zipcode
 import datetime
 import sqlalchemy
 import os
+import pymysql
+pymysql.install_as_MySQLdb()
+
+from uszipcode import ZipcodeSearchEngine
+
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder="../static/dist", \
@@ -13,19 +18,20 @@ app = Flask(__name__, static_folder="../static/dist", \
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:yhack2017@162.222.176.109/wheather'
+
 db = SQLAlchemy(app)
 
 client = Client(account_sid, auth_token)
 
-class phoneNum(db.Model):
+class user(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    phonenum = db.Column(db.String(20))
-    zipcode = db.Column(db.String(6))
+    phone_num = db.Column(db.String(20))
+    lastLocation = db.Column(db.String(6))
 
-    def __init__(self, phonenum, zipcode):
-        self.zipcode = zipcode
-        self.phonenum = phonenum
+    def __init__(self, phone_num, lastLocation):
+        self.lastLocation = lastLocation
+        self.phone_num = phone_num
 
 # renders the index page
 @app.route("/")
@@ -43,17 +49,14 @@ def submitted():
 @app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
     ''''''
-<<<<<<< HEAD
     content = request.get_json()
     phone_num = content['phonenum']
-    location = content['zipcode'] 
-=======
-    phone_num = request.form['phone_num']
-    location = request.form['zipcode']
-    pair = phoneNum(phonenum = phone_num, zipcode = location)
+    location = content['zipcode']
+    pair = user(phone_num=phone_num, lastLocation = location)
+
     db.session.add(pair)
     db.session.commit()
->>>>>>> b2a3989b85dd5ef87d8677132a131a258887b474
+
     '''
     if activeHours == None:
         db.session.insert(user).values(phone_num = phoneNumber, lastLocation = location)
@@ -69,23 +72,22 @@ def driver():
 
     #if phoneNumber ==
 
-    client.api.account.messages.create(
-        to=phoneNumber,
-        from_= fromNumber,
-        body=outputStrs
-        )
+#client.api.account.messages.create(
+##       from_= fromNumber,
+#       body=outputStrs
+#        )
     return outputStrs
 
 
-<<<<<<< HEAD
+
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
 #     if VerificationStatus == "success":
 #         return "You have successfully verified your phone number"
 #     else:
 #         return "Sorry, we were not able to verify your phone number. Please try again"
-    
-# @app.route("/_sendMessage", method = ['POST'])   
+
+# @app.route("/_sendMessage", method = ['POST'])
 # def sendMessage():
 
 #     client.api.account.messages.create(
@@ -93,39 +95,15 @@ def driver():
 #         from_= fromNumber,
 #         body=outputStrs
 #         )
-#     return 
+#     return
 
 # @app.route("/_verifyNumber", method = ['POST'])
 # def verifyNumber(phoneNumber):
 #     # validation_request = client.validation_requests \
 #     #                        .create(phoneNumber)
 #     validation_request = client.validation_requests \
-#                            .create(phoneNumber, None, None, None, "/_confirm")
-=======
-@app.route("/_confirm", method = ['POST'])
-def confirm(VerificationStatus)
-    if VerificationStatus == "success":
-        return "You have successfully verified your phone number"
-    else:
-        return "Sorry, we were not able to verify your phone number. Please try again"
+#                            .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
 
-@app.route("/_sendMessage", method = ['POST'])
-def sendMessage():
-
-    client.api.account.messages.create(
-        to=phoneNumber,
-        from_= fromNumber,
-        body=outputStrs
-        )
-    return
-
-@app.route("/_verifyNumber", method = ['POST'])
-def verifyNumber(phoneNumber):
-    # validation_request = client.validation_requests \
-    #                        .create(phoneNumber)
-    validation_request = client.validation_requests \
-                           .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
->>>>>>> b2a3989b85dd5ef87d8677132a131a258887b474
 
 #     return validation_request.validation_code
 
@@ -133,11 +111,18 @@ def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
     # to use the api, we need to change it to lat/lon
-    curZipcode = zipcode.isequal(str(location))
+
+    search = ZipcodeSearchEngine()
+
+    #print(type(location))
+    #loc = location + ''
+    #print(id(loc), id(location))
+    #curZipcode = zipcode.isequal(str(loc))
+    curZipcode = search.by_zipcode(location)
     if curZipcode is None:
         return 'ERROR'
-    lat = curZipcode.lat
-    lon = curZipcode.lon
+    lat = curZipcode['Latitude']
+    lon = curZipcode['Longitude']
 
     # API url
     url = 'https://api.darksky.net/forecast/73e7ea4a962e1d8c65470b15ceda0965/'
