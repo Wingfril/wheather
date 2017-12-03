@@ -4,14 +4,17 @@ from keys import *
 import requests
 import zipcode
 import datetime
-import sqlalchemy
+# import sqlalchemy
 import os
-import pymysql
-pymysql.install_as_MySQLdb()
+# import pymysql
+import schedule
+import time
+import threading
+# pymysql.install_as_MySQLdb()
 
 from uszipcode import ZipcodeSearchEngine
 
-from flask_sqlalchemy import SQLAlchemy
+# from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
@@ -20,18 +23,18 @@ app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:yhack2017@162.222.176.109/wheather'
 
-db = SQLAlchemy(app)
+# db = SQLAlchemy(app)
 
 client = Client(account_sid, auth_token)
 
-class user(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    phone_num = db.Column(db.String(20))
-    lastLocation = db.Column(db.String(6))
+# class user(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     phone_num = db.Column(db.String(20))
+#     lastLocation = db.Column(db.String(6))
 
-    def __init__(self, phone_num, lastLocation):
-        self.lastLocation = lastLocation
-        self.phone_num = phone_num
+#     def __init__(self, phone_num, lastLocation):
+#         self.lastLocation = lastLocation
+#         self.phone_num = phone_num
 
 # renders the index page
 @app.route("/")
@@ -52,10 +55,11 @@ def driver():
     content = request.get_json()
     phone_num = content['phonenum']
     location = content['zipcode']
+
     pair = user(phone_num=phone_num, lastLocation = location)
 
-    db.session.add(pair)
-    db.session.commit()
+    # db.session.add(pair)
+    # db.session.commit()
 
     '''
     if activeHours == None:
@@ -71,13 +75,29 @@ def driver():
 
 
     #if phoneNumber ==
-
-#client.api.account.messages.create(
-##       from_= fromNumber,
-#       body=outputStrs
-#        )
+    client.api.account.messages.create(
+            to="+1" + phone_num,
+            from_= fromNumber,
+            body=outputStrs
+            )
+    schedule.every(2).minutes.do(sendMessage, phone_num, location)
     return outputStrs
 
+def sendMessage(phone_num, location):
+    data = parser(location)
+    if data == 'ERROR':
+        return 'ERROR'
+    weightedTempDays = results(data)
+    outputStrs = languageOutput(weightedTempDays)
+
+
+    #if phoneNumber ==
+
+    client.api.account.messages.create(
+        to="+1" + phone_num,
+        from_= fromNumber,
+        body=outputStrs
+        )
 
 
 # @app.route("/_confirm", method = ['POST'])
@@ -244,5 +264,35 @@ def get(url):
     except:
         return False
 
+@app.before_first_request
+def activate_job():
+    def run_job():
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+    thread = threading.Thread(target= run_job)
+    thread.start()
+
+def start_runner():
+    def start_loop():
+        not_started = True
+        while not_started:
+            print('In start loop')
+            try:
+                r = requests.get('http://127.0.0.1:5000/')
+                if r.status_code == 200:
+                    print('Server started, quiting start_loop')
+                    not_started = False
+                print(r.status_code)
+            except:
+                print('Server not yet started')
+            time.sleep(2)
+
+    print('Started runner')
+    thread = threading.Thread(target=start_loop)
+    thread.start()
 if __name__ == "__main__":
-	app.run(debug=True)
+    start_runner()
+    app.run(debug=True)
+
+
