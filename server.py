@@ -77,7 +77,7 @@ def driver():
         body=outputStrs
         )
     # schedule.every(1).minutes.do(sendMessage, phone_num, location)
-    schedule.every().day.at("11:00").do(sendMessage, phone_num, location)
+    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
     return ""
 
 def sendMessage(phone_num, location):
@@ -192,13 +192,13 @@ def results(data):
                 weightTemp = sum(weightedTempOneDay)
                 weightedTempOneDay = []
                 level = 0
-                if weightTemp <= 40:
+                if weightTemp < 40:
                     # winter coar and jacket
                     level = 1
-                elif weightTemp <= 60:
+                elif weightTemp < 60:
                     # heavy coat
                     level = 2
-                elif weightTemp <= 70:
+                elif weightTemp < 70:
                     # light jacket
                     level = 3
                 else:
