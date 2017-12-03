@@ -14,27 +14,23 @@ import threading
 
 from uszipcode import ZipcodeSearchEngine
 
-# from flask_sqlalchemy import SQLAlchemy
+import multiprocessing
+import math
+
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
 
 app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:yhack2017@162.222.176.109/wheather'
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['SQLALCHEMY_DATABASE_URI']
 
 # db = SQLAlchemy(app)
 
 client = Client(account_sid, auth_token)
 
-# class user(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     phone_num = db.Column(db.String(20))
-#     lastLocation = db.Column(db.String(6))
 
-#     def __init__(self, phone_num, lastLocation):
-#         self.lastLocation = lastLocation
-#         self.phone_num = phone_num
 
 # renders the index page
 @app.route("/")
@@ -42,8 +38,7 @@ def index():
     return render_template("index.html")
 
 # renders the info/message page
-
-@app.route("/main")
+@app.route("/submit")
 def submitted():
     # NEED CHANGING
     return render_template("index.html")
@@ -51,12 +46,12 @@ def submitted():
 
 @app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
-    ''''''
-    content = request.get_json()
-    phone_num = content['phonenum']
-    location = content['zipcode']
 
-    pair = user(phone_num=phone_num, lastLocation = location)
+
+    content = request.get_json()
+    phone_num = "+1" + content['phonenum']
+    location = content['zipcode'] 
+    # pair = phoneNum(phonenum = phone_num, zipcode = location)
 
     # db.session.add(pair)
     # db.session.commit()
@@ -69,19 +64,16 @@ def driver():
     '''
     data = parser(location)
     if data == 'ERROR':
-        return 'ERROR'
+        return 'Sorry, we couldn\'t locate your zipcode. Try another one nearby.'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
-
-    #if phoneNumber ==
     client.api.account.messages.create(
-            to="+1" + phone_num,
-            from_= fromNumber,
-            body=outputStrs
-            )
-    schedule.every(2).minutes.do(sendMessage, phone_num, location)
-    return outputStrs
+        to=phone_num,
+        from_=fromNumber,
+        body=outputStrs
+        )
+    return ""
 
 def sendMessage(phone_num, location):
     data = parser(location)
@@ -94,11 +86,10 @@ def sendMessage(phone_num, location):
     #if phoneNumber ==
 
     client.api.account.messages.create(
-        to="+1" + phone_num,
+        to= phone_num,
         from_= fromNumber,
         body=outputStrs
         )
-
 
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
@@ -124,7 +115,6 @@ def sendMessage(phone_num, location):
 #     validation_request = client.validation_requests \
 #                            .create(phoneNumber, None, None, None, app.root_path+"/_confirm")
 
-
 #     return validation_request.validation_code
 
 def parser(location):
@@ -133,13 +123,10 @@ def parser(location):
     # to use the api, we need to change it to lat/lon
 
     search = ZipcodeSearchEngine()
-
-    #print(type(location))
-    #loc = location + ''
-    #print(id(loc), id(location))
-    #curZipcode = zipcode.isequal(str(loc))
     curZipcode = search.by_zipcode(location)
-    if curZipcode is None:
+    print(curZipcode)
+
+    if curZipcode['City'] is None:
         return 'ERROR'
     lat = curZipcode['Latitude']
     lon = curZipcode['Longitude']
@@ -151,7 +138,7 @@ def parser(location):
     # Calling the API and parsing it
     weather = get(url)
     if 'error' in weather:
-        return  'ERROR'
+        return 'ERROR'
     totalHourlyInfo = weather['hourly']
     hourlyData = totalHourlyInfo['data']
     # This is the relevent hourly data for the current location
@@ -164,7 +151,7 @@ def parser(location):
         time = curHourData['time']
         apparentTemp = curHourData['apparentTemperature']
         uvIndex = curHourData['uvIndex']
-        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition, uvIndex))
+        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition, uvIndex, curZipcode['City']))
     return data
 
 def results(data):
@@ -210,7 +197,8 @@ def results(data):
                 else:
                     # t shirt mannnnn
                     level = 4
-                weightedTempDays.append((level, rain, sleet, snow, uv))
+                    # i[1] is apparent temp, i[4] is city
+                weightedTempDays.append((level, rain, sleet, snow, uv, i[1], i[4]))
 
             weightedTempOneDay.append(weight[hour]*i[1])
             if i[3] > 5:
@@ -226,13 +214,14 @@ def results(data):
     return weightedTempDays
 
 def languageOutput(weightedTempDays):
+    print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
-    output = ""
-    day = weightedTempDays[0]
+    day = weightedTempDays[0]    
+    output = "It feels like " + str(round(day[5])) + "F" + " in " + day[6] + " today. "
     if day[1]:
         output += "It's raining today. Wear rain boots and bring an umbrella!\n"
     elif day[2]:
-        output += ""
+        output += "Looks like sleet today. Wear boots!"
     elif day[3]:
         output += "It's snowing today. Wear snow boots.\n"
 
@@ -241,19 +230,17 @@ def languageOutput(weightedTempDays):
         # do we also want to print out what the average temp or high/low temp is?
         output += "It's very cold today. Wear a winter coat and jacket, gloves, hat, scarf, and boots.\n"
     elif level == 2:
-        output += "Wear a heavy jacket today\n"
+        output += "It's pretty cold today - wear a heavy jacket!\n"
     elif level == 3:
-        output += "Wear a light jacket today\n"
+        output += "It's a bit chilly out. Wear a light jacket today.\n"
     elif level == 4:
-        output += "It's warm today. Wear a t-shirt\n"
+        output += "It's warm today - t-shirt and shorts weather!\n"
 
     if day[4]:
         #do we want to print out what the UV index is/ what hours you should wear it
         output += "There's a high UV Index today. Make sure to wear sunscreen, a hat, and sunglasses.\n"
     print(output)
     return output
-
-
 
 
 # Get the jsoned weather data
@@ -264,6 +251,7 @@ def get(url):
     except:
         return False
 
+<<<<<<< HEAD
 @app.before_first_request
 def activate_job():
     def run_job():
@@ -295,4 +283,32 @@ if __name__ == "__main__":
     start_runner()
     app.run(debug=True)
 
+# @app.route('/checkTime')
+# def starting():
+#     backProc = multiprocessing.Process(target=checkTime, args=(), daemon=True)
+#     backProc.start()
+#     return 'hi'
+
+# def checkTime():
+#     time = datetime.datetime.now()
+#     print(time)
+
+# def startWebserver():
+#     app.run(debug=True, use_reloader=False)
+# if __name__ == "__main__":
+# '''    appThread = threading.Thread(target = startWebserver)
+#     schedulerThread = threading.Thread(target=checkTime)
+#     lock1 = threading.Lock()
+#     lock2 = threading.Lock()
+#     schedulerThread.start()
+#     appThread.start()
+
+#     while True:
+#         lock1.acquire()
+#         lock1.release()
+#         lock2.acquire()
+#         lock2.release()
+# '''
+#     app.run(threaded=True, use_reloader=False)
+#checkTime()
 

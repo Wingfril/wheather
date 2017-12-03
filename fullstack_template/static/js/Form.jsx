@@ -22,11 +22,6 @@ class Form extends React.Component {
     this.setState({zipcode: event.target.value});
   }
 
-  // handleSubmit(event) {
-  //   alert('A name was submitted: ' + this.state.phone);
-  //   event.preventDefault();
-  // }
-
   handleSubmit(event) {
     event.preventDefault();
     var data = {
@@ -34,39 +29,41 @@ class Form extends React.Component {
       zipcode: this.state.zipcode
     };
 
-
     $.ajax({
       type:"POST",
       url:$SCRIPT_ROOT + "/_info",
       data: JSON.stringify(data),
       contentType: 'application/json',
-      success: function(data) {
-        console.log(data);
+      success: (data) => {
+        this.setState({message: data});
       },
-      error: function(data) {
-        console.log(data);
+      error: (data) => {
+        this.setState({message: data});
       }
     });
-
-    // console.log(data);
-    // $.get('/_info', (data) => {
-    //     console.log(data);
-    // })
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <p>Phone Number:</p>
-          <input type="text" value={this.state.phone} 
-          placeholder="phone number" onChange={this.handleChangePhone} />
-        <br />
-        <p>Zip Code:</p>
-          <input type="text" value={this.state.zipcode} 
-          placeholder="zip code" onChange={this.handleChangeZip} />
-        <br />
-        <input type="submit" value="Submit" />
-      </form>
+      <div className = "form">
+        <form onSubmit={this.handleSubmit}>
+          <p>Phone Number:</p>
+            <div className='phone_number'>
+              <div className='country_code'>
+              +1
+              </div>
+              <input type="text" value={this.state.phone} 
+              onChange={this.handleChangePhone} />
+            </div>
+          <br />
+          <p>Zip Code:</p>
+            <input type="text" value={this.state.zipcode} 
+            onChange={this.handleChangeZip} />
+          <br />
+          <input className="button" type="submit" value="Submit" />
+        </form>
+        <p>{this.state.message}</p>
+      </div>
     );
   }
 }
