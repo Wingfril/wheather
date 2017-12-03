@@ -1,0 +1,71 @@
+body {
+	text-align: center;
+	font-family: 'Sarala', sans-serif;
+	border-top: 5px solid;
+	border-color: hsl(345, 80%, 55%);
+	background-image: url("umbrella.png");
+	background-size: auto 100vh;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+h1 {
+	color: white;
+	margin-top: 0;
+	padding: 100px;
+	font-size: 64px;
+	font-family: 'Pacifico', sans-serif;
+}
+
+.form {
+	padding: 30px;
+	width: 300px;
+	margin: auto;
+	background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* mess with width of input boxes */
+
+p {
+	color: white;
+	margin-bottom: 0px;
+	padding-top: 10px;
+	font-size: 16px;
+}
+
+.phone_number {
+	display: inline;
+	vertical-align: middle;
+	position: relative;
+}
+
+.country_code {
+	color: white;
+	display: inline;
+	position: absolute;
+}
+
+input[type=text] {
+	padding: 0px 6px;
+	background: none;
+	border: none;
+	border-bottom: 2px solid hsl(345, 80%, 55%);
+	color: #d3d3d3;
+	width: 200px;
+}
+
+.phone_number input[type=text] {
+	padding: 0px 18px;
+}
+
+.button {
+	width: 70px;
+	height: 30px;
+	margin-top: 10px;
+	border: none;
+	border-radius: 5px;
+	background: linear-gradient(to bottom, hsl(345, 80%, 55%), hsl(345, 80%, 35%));
+	color: white;
+	display: inline-block;
+	text-align: center;
+}
