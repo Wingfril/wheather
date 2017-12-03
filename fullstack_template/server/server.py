@@ -6,12 +6,12 @@ import zipcode
 import datetime
 # import sqlalchemy
 import os
+import math
+# import pymysql
+# pymysql.install_as_MySQLdb()
 # from flask_sqlalchemy import SQLAlchemy
 
 from uszipcode import ZipcodeSearchEngine
-
-city = ""
-temperature = ""
 
 app = Flask(__name__, static_folder="../static/dist", \
             template_folder="../static")
@@ -38,8 +38,7 @@ def index():
     return render_template("index.html")
 
 # renders the info/message page
-
-@app.route("/main")
+@app.route("/submit")
 def submitted():
     # NEED CHANGING
     return render_template("index.html")
@@ -47,12 +46,14 @@ def submitted():
 
 @app.route("/_info",  methods = ['GET', 'POST'])
 def driver():
+
     content = request.get_json()
     phone_num = "+1" + content['phonenum']
     location = content['zipcode'] 
     # pair = phoneNum(phonenum = phone_num, zipcode = location)
     # db.session.add(pair)
     # db.session.commit()
+
     '''
     if activeHours == None:
         db.session.insert(user).values(phone_num = phoneNumber, lastLocation = location)
@@ -64,9 +65,6 @@ def driver():
         return 'Sorry, we couldn\'t locate your zipcode. Try another one nearby.'
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
-
-
-    #if phoneNumber ==
 
     client.api.account.messages.create(
         to=phone_num,
@@ -81,8 +79,8 @@ def driver():
 #         return "You have successfully verified your phone number"
 #     else:
 #         return "Sorry, we were not able to verify your phone number. Please try again"
-    
-# @app.route("/_sendMessage", method = ['POST'])   
+
+# @app.route("/_sendMessage", method = ['POST'])
 # def sendMessage():
 
 #     client.api.account.messages.create(
@@ -90,7 +88,7 @@ def driver():
 #         from_= fromNumber,
 #         body=outputStrs
 #         )
-#     return 
+#     return
 
 # @app.route("/_verifyNumber", method = ['POST'])
 # def verifyNumber(phoneNumber):
@@ -105,14 +103,15 @@ def parser(location):
     ''' Parse the json for needed data'''
     # We are given an string of the zip.
     # to use the api, we need to change it to lat/lon
+
     search = ZipcodeSearchEngine()
     curZipcode = search.by_zipcode(location)
     print(curZipcode)
-    if curZipcode is None:
+
+    if curZipcode['City'] is None:
         return 'ERROR'
     lat = curZipcode['Latitude']
     lon = curZipcode['Longitude']
-    city = curZipcode['City']
 
     # API url
     url = 'https://api.darksky.net/forecast/73e7ea4a962e1d8c65470b15ceda0965/'
@@ -134,7 +133,7 @@ def parser(location):
         time = curHourData['time']
         apparentTemp = curHourData['apparentTemperature']
         uvIndex = curHourData['uvIndex']
-        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition, uvIndex))
+        data.append((datetime.datetime.fromtimestamp(time), apparentTemp, condition, uvIndex, curZipcode['City']))
     return data
 
 def results(data):
@@ -180,7 +179,8 @@ def results(data):
                 else:
                     # t shirt mannnnn
                     level = 4
-                weightedTempDays.append((level, rain, sleet, snow, uv))
+                    # i[1] is apparent temp, i[4] is city
+                weightedTempDays.append((level, rain, sleet, snow, uv, i[1], i[4]))
 
             weightedTempOneDay.append(weight[hour]*i[1])
             if i[3] > 5:
@@ -198,8 +198,8 @@ def results(data):
 def languageOutput(weightedTempDays):
     print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
-    output = ""
-    day = weightedTempDays[0]
+    day = weightedTempDays[0]    
+    output = "It feels like " + str(round(day[5])) + "F" + " in " + day[6] + " today."
     if day[1]:
         output += "It's raining today. Wear rain boots and bring an umbrella!\n"
     elif day[2]:

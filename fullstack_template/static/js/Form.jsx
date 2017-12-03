@@ -7,8 +7,7 @@ class Form extends React.Component {
     super(props);
     this.state = {
         phone: '',
-        zipcode: '',
-        message: ''};
+        zipcode: ''};
 
     this.handleChangePhone = this.handleChangePhone.bind(this);
     this.handleChangeZip = this.handleChangeZip.bind(this);
