@@ -284,6 +284,6 @@ def start_runner():
     thread.start()
 if __name__ == "__main__":
     start_runner() 
-    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
+    schedule.every().day.at("8:00").do(sendMessage)
 
     app.run(debug=True)
