@@ -195,7 +195,7 @@ def results(data):
                 if weightTemp <= 39:
                     # winter coar and jacket
                     level = 1
-                elif weightTemp <= 59:
+                elif weightTemp <= 55:
                     # heavy coat
                     level = 2
                 elif weightTemp <= 69:
