@@ -30,7 +30,7 @@ app.config['TEMPLATES_AUTO_RELOAD'] = 0
 
 client = Client(account_sid, auth_token)
 
-
+users = {}
 
 # renders the index page
 @app.route("/")
@@ -40,7 +40,6 @@ def index():
 # renders the info/message page
 @app.route("/submit")
 def submit():
-    # NEED CHANGING
     return render_template("submit.html")
 
 
@@ -71,30 +70,31 @@ def driver():
     weightedTempDays = results(data)
     outputStrs = languageOutput(weightedTempDays)
 
+    users[phone_num] = location
+
     client.api.account.messages.create(
         to=phone_num,
         from_=fromNumber,
         body=outputStrs
         )
-    # schedule.every(1).minutes.do(sendMessage, phone_num, location)
-    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
+
     return ""
 
-def sendMessage(phone_num, location):
-    data = parser(location)
-    if data == 'ERROR':
-        return 'ERROR'
-    weightedTempDays = results(data)
-    outputStrs = languageOutput(weightedTempDays)
+def sendMessage():
+    for i in list(users): 
+        phone_num = i
+        location = users[i]
+        data = parser(location)
+        if data == 'ERROR':
+            return 'ERROR'
+        weightedTempDays = results(data)
+        outputStrs = languageOutput(weightedTempDays)
 
-
-    #if phoneNumber ==
-
-    client.api.account.messages.create(
-        to= phone_num,
-        from_= fromNumber,
-        body=outputStrs
-        )
+        client.api.account.messages.create(
+            to= phone_num,
+            from_= fromNumber,
+            body=outputStrs
+            )
 
 # @app.route("/_confirm", method = ['POST'])
 # def confirm(VerificationStatus):
@@ -129,7 +129,7 @@ def parser(location):
 
     search = ZipcodeSearchEngine()
     curZipcode = search.by_zipcode(location)
-    print(curZipcode)
+    # print(curZipcode)
 
     if curZipcode['City'] is None:
         return 'ERROR'
@@ -187,7 +187,7 @@ def results(data):
                 # How do we calculate the weighted temperature??
                 # right now the placeholder for that is ...
                 # Winter coat, jacket, boots, gloves, hats
-                print(weightedTempOneDay)
+                # print(weightedTempOneDay)
                 
                 weightTemp = sum(weightedTempOneDay)
                 weightedTempOneDay = []
@@ -219,7 +219,7 @@ def results(data):
     return weightedTempDays
 
 def languageOutput(weightedTempDays):
-    print(weightedTempDays)
+    # print(weightedTempDays)
     '''Need a way to output in grammatically correct sentences'''
     day = weightedTempDays[0]    
     output = "It'll be about " + str(int(round(day[5]))) + "F" + " in " + day[6] + " today. "
@@ -243,7 +243,6 @@ def languageOutput(weightedTempDays):
     if day[4]:
         #do we want to print out what the UV index is/ what hours you should wear it
         output += "There's also a high UV index. Make sure to wear sunscreen, a hat, and sunglasses!\n"
-    print(output)
     return output
 
 
@@ -284,6 +283,7 @@ def start_runner():
     thread = threading.Thread(target=start_loop)
     thread.start()
 if __name__ == "__main__":
+    start_runner() 
+    schedule.every().day.at("8:00").do(sendMessage, phone_num, location)
 
-    start_runner()
     app.run(debug=True)
