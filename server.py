@@ -172,50 +172,85 @@ def results(data):
     weight = {0: N*2, 1: N, 2: N, 3: N, 4: N, 5: N, 6: N*2, 7: N*2, \
     8: N*2, 9: N*3, 10: N*4, 11: N*6, 12: N*8, 13: N*8, 14: N*8, 15: N*8, \
     16: N*7, 17: N*7, 18: N*7, 19: N*6, 20: N*5, 21: N*4, 22: N*3, 23: N*3}
-    counter = 0
-    for i in data:
+    # counter = 0
+    rain = False
+    sleet = False
+    snow = False
+    uv = False
+    for j in range(0, 23):
         # it would be nice if we can associate the time of the rain/snow/etc
-        if counter <= 24:
-            rain = False
-            sleet = False
-            snow = False
-            uv = False
-            hour = i[0].hour
-            day = i[0].day
-            if counter == 24:
-                counter = 0
-                # How do we calculate the weighted temperature??
-                # right now the placeholder for that is ...
-                # Winter coat, jacket, boots, gloves, hats
-                # print(weightedTempOneDay)
+        i = data[j]
+        hour = i[0].hour
+        day = i[0].day
+        weightedTempOneDay.append(weight[hour]*i[1])
+        # print(i[2])
+        if i[3] > 5:
+            uv = uv or True
+        if i[2] == 'rain':
+            rain = rain or True
+        if i[2] == 'sleet':
+            sleet = sleet or True
+        if i[2] == 'snow':
+            snow = snow or True
+    weightTemp = sum(weightedTempOneDay)
+    weightedTempOneDay = []
+    level = 0
+    if weightTemp <= 39:
+        # winter coar and jacket
+        level = 1
+    elif weightTemp <= 55:
+        # heavy coat
+        level = 2
+    elif weightTemp <= 69:
+        # light jacket
+        level = 3
+    else:
+        # t shirt mannnnn
+        level = 4
+        # i[1] is apparent temp, i[4] is city
+    weightedTempDays.append((level, rain, sleet, snow, uv, weightTemp, i[4]))
+        # if counter <= 24:
+        #     rain = False
+        #     sleet = False
+        #     snow = False
+        #     uv = False
+        #     hour = i[0].hour
+        #     day = i[0].day
+        #     if counter == 24:
+        #         counter = 0
+        #         # How do we calculate the weighted temperature??
+        #         # right now the placeholder for that is ...
+        #         # Winter coat, jacket, boots, gloves, hats
+        #         # print(weightedTempOneDay)
                 
-                weightTemp = sum(weightedTempOneDay)
-                weightedTempOneDay = []
-                level = 0
-                if weightTemp <= 39:
-                    # winter coar and jacket
-                    level = 1
-                elif weightTemp <= 55:
-                    # heavy coat
-                    level = 2
-                elif weightTemp <= 69:
-                    # light jacket
-                    level = 3
-                else:
-                    # t shirt mannnnn
-                    level = 4
-                    # i[1] is apparent temp, i[4] is city
-                weightedTempDays.append((level, rain, sleet, snow, uv, weightTemp, i[4]))
-            weightedTempOneDay.append(weight[hour]*i[1])
-            if i[3] > 5:
-                uv = True
-            if i[2] == 'rain':
-                rain = True
-            if i[2] == 'sleet':
-                sleet = True
-            if i[2] == 'snow':
-                snow = True
-            counter += 1
+        #         weightTemp = sum(weightedTempOneDay)
+        #         weightedTempOneDay = []
+        #         level = 0
+        #         if weightTemp <= 39:
+        #             # winter coar and jacket
+        #             level = 1
+        #         elif weightTemp <= 55:
+        #             # heavy coat
+        #             level = 2
+        #         elif weightTemp <= 69:
+        #             # light jacket
+        #             level = 3
+        #         else:
+        #             # t shirt mannnnn
+        #             level = 4
+        #             # i[1] is apparent temp, i[4] is city
+        #         weightedTempDays.append((level, rain, sleet, snow, uv, weightTemp, i[4]))
+        #     weightedTempOneDay.append(weight[hour]*i[1])
+        #     print(i[2])
+        #     if i[3] > 5:
+        #         uv = True
+        #     if i[2] == 'rain':
+        #         rain = True
+        #     if i[2] == 'sleet':
+        #         sleet = True
+        #     if i[2] == 'snow':
+        #         snow = True
+        #     counter += 1
     return weightedTempDays
 
 def languageOutput(weightedTempDays):
